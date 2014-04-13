@@ -14,6 +14,8 @@
 (describe "insert"
           (it "should create a new tree with a null tree"
               (should= (create-tree 3) (insert nil 3)))
+          (it "should allow an initial value for convenience"
+              (should= 3 (:value (insert 3 42))))
           (it "should add a smaller value on the left"
               (should= 2
                        (get-in (insert (create-tree 3) 2) [:left :value])))
@@ -37,4 +39,6 @@
           (it "right-left"
               (should= 4 (get-in @left-leaning-5-tree [:right :left :value])))
           (it "right-right"
-              (should= 6 (get-in @left-leaning-5-tree [:right :right :value]))))
+              (should= 6 (get-in @left-leaning-5-tree [:right :right :value])))
+          (it "should handle multiple values"
+              (should= @left-leaning-5-tree (insert 3 2 5 1 4 6))))
