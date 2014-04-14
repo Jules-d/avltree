@@ -95,8 +95,20 @@
   ([tree value & values]
      (apply insert (cons (insert tree value) values))))
 
+(defn reduce-tree
+  "Apply f to each leaf from the rightmost to the leftmost, accumulating the result in the accumulator"
+  [tree f accumulator]
+  (let [right-value (if (:right tree)
+                      (reduce-tree (:right tree) f accumulator)
+                      accumulator)
+        middle-value (f (:value tree) right-value)]
+    (if (:left tree)
+      (reduce-tree (:left tree) f middle-value)
+      middle-value)))
+
 (defn validate-bst [tree]
   nil)
+
 
 
 (defn -main

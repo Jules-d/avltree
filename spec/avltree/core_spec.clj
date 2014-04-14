@@ -124,3 +124,13 @@
               (should= 2 (:value (insert 1 3 2)))
               (should= 1 (:value (:left (insert 3 2 1))))
               (should= 3 (:value (:right (insert 3 2 1))))))
+
+(describe "reduce-tree"
+          (it "should pass the value and the accumulator to the function"
+              (should= "1" (reduce-tree (insert 1) str "")))
+          (it "should reduce into the right branch"
+              (should= 3 (reduce-tree (insert 1 2) + 0)))
+          (it "should reduce into the left branch"
+              (should= 3 (reduce-tree (insert 2 1) + 0)))
+          (it "should apply the function to each value in order and accumulate the result"
+              (should= '(1 2 3 4 5 6) (reduce-tree (insert 1 2 3 4 6 5) cons []))))
