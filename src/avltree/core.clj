@@ -21,6 +21,8 @@
   (assoc tree :height (inc (max (height (:left tree))
                                 (height (:right tree))))))
 
+;; Reference link:
+;; http://pages.cs.wisc.edu/~ealexand/cs367/NOTES/AVL-Trees/index.html
 (defn rotate-left [tree]
   (let [A (:value tree)
         B (:value (:right tree))
