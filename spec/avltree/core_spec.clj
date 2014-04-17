@@ -1,7 +1,10 @@
 (ns avltree.core-spec
-    (:use
-        [speclj.core]
-        [avltree.core]))
+  (:use
+   [speclj.core]
+   [avltree.core])
+  (:require [clojure.test.check :as tc]
+            [clojure.test.check.generators :as gen]
+            [clojure.test.check.properties :as prop]))
 
 (describe "create-tree"
     (it "should have the value we give it"
@@ -134,3 +137,14 @@
               (should= 3 (reduce-tree (insert 2 1) + 0)))
           (it "should apply the function to each value in order and accumulate the result"
               (should= '(1 2 3 4 5 6) (reduce-tree (insert 1 2 3 4 6 5) cons []))))
+
+;;; The test.check example
+(def prop-sorted-first-less-than-last
+  (prop/for-all [v (gen/not-empty (gen/vector gen/int))]
+    (let [s (sort v)]
+      (<= (first s) (last s)))))
+
+(describe "trying out test.check"
+          (it "Run the example test.check in a speclj test"
+              (should-be :result
+               (tc/quick-check 1000 prop-sorted-first-less-than-last))))
