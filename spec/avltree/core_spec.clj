@@ -175,4 +175,4 @@
 (describe "My first property based test"
           (it "Check that using reduce tree on any input returns a sorted collection with no duplicates"
               (should-not-be :fail
-                         (tc/quick-check 1000 prop-reduce-tree-cons-equals-sorted-set))))
+                         (tc/quick-check 100 prop-reduce-tree-cons-equals-sorted-set))))
