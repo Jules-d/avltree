@@ -148,3 +148,31 @@
           (it "Run the example test.check in a speclj test"
               (should-be :result
                (tc/quick-check 1000 prop-sorted-first-less-than-last))))
+
+(def input-gen
+  (gen/vector gen/int))
+
+(defn sorted-unique-values [coll]
+  (-> coll
+      (set)
+      (vec)
+      (sort)))
+
+(describe "sorted-unique-values"
+          (it "Sorts and eliminates duplicates"
+              (should= [0 1 2 3 4]
+                       (sorted-unique-values [ 0 1 0 2 3 3 1 0 2 4]))
+              (should-not= [0 1 2 3 4]
+                           (sorted-unique-values [ 0 1 0 2 5 3 3 1 0 2 4]))))
+
+(def prop-reduce-tree-cons-equals-sorted-set
+  (prop/for-all [i input-gen]
+                (= (sorted-unique-values i)
+                   (reduce-tree (apply insert i) cons []))))
+
+;;; Oops!  It turns out that an assertion is truthy, so I needed to switch to
+;;; (should-not-be :fail property)
+(describe "My first property based test"
+          (it "Check that using reduce tree on any input returns a sorted collection with no duplicates"
+              (should-not-be :fail
+                         (tc/quick-check 1000 prop-reduce-tree-cons-equals-sorted-set))))
